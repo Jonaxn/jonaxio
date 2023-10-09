@@ -1,11 +1,8 @@
-import React from "react"
+import React from "react";
+import { BlitzPage } from "@blitzjs/next";
 
-const About = () => {
-  return (
-    <div>
-      this is about page me
-    </div>
-  )
-}
+const About: BlitzPage = () => {
+  return <div>this is about page me</div>;
+};
 
-export default About
+export default About;

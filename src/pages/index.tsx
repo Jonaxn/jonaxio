@@ -1,7 +1,7 @@
-import { Suspense } from "react"
-import Layout from "src/core/layouts/Layout"
-import { BlitzPage } from "@blitzjs/next"
-import { UserInfo } from "../components/userInfo"
+import { Suspense } from "react";
+import Layout from "src/core/layouts/Layout";
+import { BlitzPage } from "@blitzjs/next";
+import { UserInfo } from "../components/userInfo";
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -15,7 +15,7 @@ const Home: BlitzPage = () => {
         <UserInfo />
       </Suspense>
     </Layout>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
