@@ -7,8 +7,7 @@
     "start": "blitz start",
     "studio": "blitz prisma studio",
     "test": "vitest run --passWithNoTests",
-    "test:watch": "vitest",
-    "prepare": "husky install"
+    "test:watch": "vitest"
   },
   "prisma": {
     "schema": "db/schema.prisma"
