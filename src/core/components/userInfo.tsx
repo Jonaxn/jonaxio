@@ -3,7 +3,7 @@ import { useMutation } from "@blitzjs/rpc";
 import logout from "@/features/auth/mutations/logout";
 import Link from "next/link";
 import { Routes } from "@blitzjs/next";
-import { Button } from "@mantine/core";
+import { Anchor, Button } from "@mantine/core";
 
 export const UserInfo = () => {
   const currentUser = useCurrentUser();
@@ -30,14 +30,13 @@ export const UserInfo = () => {
   } else {
     return (
       <>
-        <Link href={Routes.SignupPage()}>
-          {/*<Link href={Routes.SignupPage()} className={styles.button}>*/}
-          <strong>Sign Up</strong>
-        </Link>
-        {/*<Link href={Routes.LoginPage()} className={styles.loginButton}>*/}
-        <Link href={Routes.LoginPage()}>
-          <strong>Login</strong>
-        </Link>
+        <Anchor href="https://google.com">goto google</Anchor>
+        <Button component={Link} href={Routes.SignupPage()}>
+          Sign Up
+        </Button>
+        <Button component={Link} href={Routes.LoginPage()}>
+          Login
+        </Button>
       </>
     );
   }
