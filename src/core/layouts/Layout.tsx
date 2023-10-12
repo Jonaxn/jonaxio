@@ -1,9 +1,10 @@
 import Head from "next/head";
 import React, { FC, Suspense } from "react";
-import { BlitzLayout } from "@blitzjs/next";
-import { AppShell, Footer, Header, Navbar, Text } from "@mantine/core";
+import { BlitzLayout, Routes } from "@blitzjs/next";
+import { Anchor, AppShell, Footer, Header, Navbar, Text } from "@mantine/core";
 import { Horizontal, Vertical } from "mantine-layout-components";
 import { styles } from "ansi-colors";
+import Link from "next/link";
 
 type Prop = { title?: string; children?: React.ReactNode; maxWidth?: number };
 const Layout: BlitzLayout<Prop> = ({ title, maxWidth = 800, children }) => {
@@ -24,8 +25,16 @@ const Layout: BlitzLayout<Prop> = ({ title, maxWidth = 800, children }) => {
         // }
         header={
           <Header height={45} p="xs">
-            <Horizontal fullH debug>
-              <Text fw="bold">Jonaxio</Text>
+            <Horizontal fullH>
+              <Anchor
+                underline={false}
+                color="gray.3"
+                component={Link}
+                href={Routes.Home()}
+                fw="bold"
+              >
+                Jonaxio
+              </Anchor>
             </Horizontal>
           </Header>
         }
