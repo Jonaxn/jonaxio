@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React, { FC, Suspense } from "react";
 import { BlitzLayout, Routes } from "@blitzjs/next";
-import { Anchor, AppShell, Button, Footer, Header, Navbar, Text } from "@mantine/core";
+import { Anchor, AppShell, Button, Footer, Header, Loader, Navbar, Text } from "@mantine/core";
 import { Horizontal, Vertical } from "mantine-layout-components";
 import { styles } from "ansi-colors";
 import Link from "next/link";
@@ -67,7 +67,7 @@ const Layout: BlitzLayout<Prop> = ({ title, maxWidth = 800, children }) => {
         })}
       >
         <Vertical fullW fullH>
-          <Suspense fallback="loading..."> {children}</Suspense>
+          <Suspense fallback={<Loader />}> {children}</Suspense>
         </Vertical>
       </AppShell>
     </>

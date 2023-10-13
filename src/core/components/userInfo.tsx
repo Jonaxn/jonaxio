@@ -1,36 +1,52 @@
 import { useCurrentUser } from "@/features/users/hooks/useCurrentUser";
-import { useMutation } from "@blitzjs/rpc";
+import { useMutation, useQuery } from "@blitzjs/rpc";
 import logout from "@/features/auth/mutations/logout";
 import Link from "next/link";
 import { Routes } from "@blitzjs/next";
-import { Anchor, Button, Text } from "@mantine/core";
+import { Anchor, Button, List, Loader, Text } from "@mantine/core";
 import { Vertical } from "mantine-layout-components";
 
 import { json } from "express";
 import { log } from "blitz";
+import fetchTodos from "@/features/todos/queries/fetchTodos";
+import fetchTodo from "@/features/todos/queries/fetchTodo";
+import { Suspense } from "react";
 
-export const UserInfo = () => {
-  const currentUser = useCurrentUser();
-  const [logoutMutation] = useMutation(logout);
-  if (!currentUser) {
-    return null;
-  }
-  const fetchTodos = () => {
-    fetch("/api/todos", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({}),
-    })
-      .then((res) => res.json())
-      .then((json) => console.log(json));
-  };
+const Todos = () => {
+  const [todos, { isLoading }] = useQuery(fetchTodos, {}, { suspense: false });
+  console.log("todos", todos);
 
   return (
     <>
+      {isLoading && <Loader />}
+      {!isLoading && todos && (
+        <List>
+          {todos.map((todo) => (
+            <List.Item key={todo.id}>
+              <Text>{todo.title}</Text>
+            </List.Item>
+          ))}
+        </List>
+      )}
+    </>
+  );
+};
+export const UserInfo = () => {
+  const currentUser = useCurrentUser();
+  const [logoutMutation] = useMutation(logout);
+
+  const [todo] = useQuery(fetchTodo, {});
+  if (!currentUser) {
+    return null;
+  }
+  return (
+    <>
       <Vertical>
-        <Button onClick={fetchTodos}>Fetch todos</Button>
+        {/*<Button onClick={fetchTodos}>Fetch todos</Button>*/}
+        <Text>{todo.title}</Text>
+        <Suspense fallback={<Loader />}>
+          <Todos />
+        </Suspense>
         <Text>
           User id: <code>{currentUser.id}</code>
         </Text>
