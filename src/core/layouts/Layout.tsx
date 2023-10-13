@@ -1,14 +1,17 @@
 import Head from "next/head";
 import React, { FC, Suspense } from "react";
 import { BlitzLayout, Routes } from "@blitzjs/next";
-import { Anchor, AppShell, Footer, Header, Navbar, Text } from "@mantine/core";
+import { Anchor, AppShell, Button, Footer, Header, Navbar, Text } from "@mantine/core";
 import { Horizontal, Vertical } from "mantine-layout-components";
 import { styles } from "ansi-colors";
 import Link from "next/link";
+import { useMutation } from "@blitzjs/rpc";
+import logout from "@/features/auth/mutations/logout";
 
 type Prop = { title?: string; children?: React.ReactNode; maxWidth?: number };
 const Layout: BlitzLayout<Prop> = ({ title, maxWidth = 800, children }) => {
   const thisYear = new Date().getFullYear();
+  const [logoutMutation] = useMutation(logout);
   return (
     <>
       <Head>
@@ -24,8 +27,8 @@ const Layout: BlitzLayout<Prop> = ({ title, maxWidth = 800, children }) => {
         //   </Navbar>
         // }
         header={
-          <Header height={45} p="xs">
-            <Horizontal fullH>
+          <Header height={55} p="xs">
+            <Horizontal fullH spaceBetween fullW>
               <Anchor
                 underline={false}
                 color="gray.3"
@@ -35,6 +38,15 @@ const Layout: BlitzLayout<Prop> = ({ title, maxWidth = 800, children }) => {
               >
                 Jonaxio
               </Anchor>
+              <Button
+                size="xs"
+                variant="light"
+                onClick={async () => {
+                  await logoutMutation();
+                }}
+              >
+                Logout
+              </Button>
             </Horizontal>
           </Header>
         }
