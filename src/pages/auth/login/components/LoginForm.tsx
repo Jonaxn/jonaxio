@@ -2,8 +2,7 @@ import { AuthenticationError, PromiseReturnType } from "blitz";
 import Link from "next/link";
 import { LabeledTextField } from "@/core/components/LabeledTextField";
 import { FORM_ERROR } from "@/core/components/Form";
-import login from "@/features/auth/mutations/login";
-import { Login } from "@/features/auth/schemas";
+import login, { Login } from "@/features/auth/mutations/login";
 import { useMutation } from "@blitzjs/rpc";
 import { Routes } from "@blitzjs/next";
 import { useForm } from "@mantine/form";
@@ -15,7 +14,7 @@ type LoginFormProps = {
 };
 
 export const LoginForm = (props: LoginFormProps) => {
-  const [loginMutation] = useMutation(login);
+  const [$login] = useMutation(login);
   const form = useForm({
     initialValues: {
       email: "",
@@ -28,19 +27,9 @@ export const LoginForm = (props: LoginFormProps) => {
   });
   const onSubmit = async (values) => {
     console.log(values);
-    try {
-      const user = await loginMutation(values);
-      props.onSuccess?.(user);
-    } catch (error: any) {
-      if (error instanceof AuthenticationError) {
-        return { [FORM_ERROR]: "Sorry, those credentials are invalid" };
-      } else {
-        return {
-          [FORM_ERROR]:
-            "Sorry, we had an unexpected error. Please try again. - " + error.toString(),
-        };
-      }
-    }
+
+    const user = await $login(values);
+    props.onSuccess?.(user);
   };
 
   return (

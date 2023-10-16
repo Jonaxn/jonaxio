@@ -9,9 +9,8 @@ const Input = z.object({
 export default resolver.pipe(
   resolver.zod(Input),
   resolver.authorize(),
-  async (params, { session: { userId } }) => {
-    const { todoTitle } = params;
-    console.log("creating a todo with title", todoTitle);
+  async ({ todoTitle }, { session: { userId } }) => {
+    console.log("creating a todo with title ", todoTitle, userId);
     return "todo created";
   }
 );

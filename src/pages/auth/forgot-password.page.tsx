@@ -1,8 +1,7 @@
 import Layout from "src/core/layouts/Layout";
 import { LabeledTextField } from "src/core/components/LabeledTextField";
 import { FORM_ERROR } from "src/core/components/Form";
-import { ForgotPassword } from "@/features/auth/schemas";
-import forgotPassword from "@/features/auth/mutations/forgotPassword";
+import forgotPassword, { ForgotPassword } from "@/features/auth/mutations/forgotPassword";
 import { useMutation } from "@blitzjs/rpc";
 import { BlitzPage } from "@blitzjs/next";
 import { Button, PasswordInput, TextInput } from "@mantine/core";
