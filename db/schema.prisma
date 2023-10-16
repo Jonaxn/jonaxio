@@ -18,6 +18,9 @@ model Todo {
 
   title String
   done  Boolean @default(false)
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?
 }
 
 model User {
@@ -29,6 +32,7 @@ model User {
   hashedPassword String?
   role           String   @default("USER")
 
+  todos    Todo[]
   tokens   Token[]
   sessions Session[]
 }

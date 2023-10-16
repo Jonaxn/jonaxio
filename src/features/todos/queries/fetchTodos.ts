@@ -6,12 +6,16 @@ const Input = z.object({
   search: z.string().optional(),
   userId: z.string(),
 });
-export default resolver.pipe(resolver.zod(Input), resolver.authorize(), async ({ search }) => {
-  console.log("user is searching for todos", search);
-  const todos = db.todo.findMany({
-    where: {
-      title: {},
-    },
-  });
-  return todos;
-});
+export default resolver.pipe(
+  resolver.zod(Input),
+  resolver.authorize(),
+  async ({}, { session: { userId } }) => {
+    // console.log("user is searching for todos", search);
+    const todos = db.todo.findMany({
+      where: {
+        userId,
+      },
+    });
+    return todos;
+  }
+);
