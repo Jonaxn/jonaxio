@@ -12,25 +12,6 @@ import fetchTodos from "@/features/todos/queries/fetchTodos";
 import fetchTodo from "@/features/todos/queries/fetchTodo";
 import { Suspense } from "react";
 
-const Todos = () => {
-  const [todos, { isLoading }] = useQuery(fetchTodos, {}, { suspense: false });
-  console.log("todos", todos);
-
-  return (
-    <>
-      {isLoading && <Loader />}
-      {!isLoading && todos && (
-        <List>
-          {todos.map((todo) => (
-            <List.Item key={todo.id}>
-              <Text>{todo.title}</Text>
-            </List.Item>
-          ))}
-        </List>
-      )}
-    </>
-  );
-};
 export const UserInfo = () => {
   const currentUser = useCurrentUser();
   const [logoutMutation] = useMutation(logout);
@@ -44,9 +25,7 @@ export const UserInfo = () => {
       <Vertical>
         {/*<Button onClick={fetchTodos}>Fetch todos</Button>*/}
         <Text>{todo.title}</Text>
-        <Suspense fallback={<Loader />}>
-          <Todos />
-        </Suspense>
+
         <Text>
           User id: <code>{currentUser.id}</code>
         </Text>

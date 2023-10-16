@@ -7,11 +7,13 @@ import { styles } from "ansi-colors";
 import Link from "next/link";
 import { useMutation } from "@blitzjs/rpc";
 import logout from "@/features/auth/mutations/logout";
+import { useCurrentUser } from "@/features/users/hooks/useCurrentUser";
 
 type Prop = { title?: string; children?: React.ReactNode; maxWidth?: number };
 const Layout: BlitzLayout<Prop> = ({ title, maxWidth = 800, children }) => {
   const thisYear = new Date().getFullYear();
   const [logoutMutation] = useMutation(logout);
+  const user = useCurrentUser();
   return (
     <>
       <Head>
@@ -38,15 +40,17 @@ const Layout: BlitzLayout<Prop> = ({ title, maxWidth = 800, children }) => {
               >
                 Jonaxio
               </Anchor>
-              <Button
-                size="xs"
-                variant="light"
-                onClick={async () => {
-                  await logoutMutation();
-                }}
-              >
-                Logout
-              </Button>
+              {user && (
+                <Button
+                  size="xs"
+                  variant="light"
+                  onClick={async () => {
+                    await logoutMutation();
+                  }}
+                >
+                  Logout
+                </Button>
+              )}
             </Horizontal>
           </Header>
         }
