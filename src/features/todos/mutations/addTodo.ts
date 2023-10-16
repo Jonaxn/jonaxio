@@ -11,6 +11,12 @@ export default resolver.pipe(
   resolver.authorize(),
   async ({ todoTitle }, { session: { userId } }) => {
     console.log("creating a todo with title ", todoTitle, userId);
-    return "todo created";
+    const todo = await db.todo.create({
+      data: {
+        title: todoTitle,
+      },
+    });
+    console.log("todo", todo);
+    return todo;
   }
 );

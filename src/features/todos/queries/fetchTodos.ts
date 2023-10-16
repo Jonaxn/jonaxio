@@ -8,10 +8,10 @@ const Input = z.object({
 });
 export default resolver.pipe(resolver.zod(Input), resolver.authorize(), async ({ search }) => {
   console.log("user is searching for todos", search);
-  const todos = [
-    { title: "buy bread", id: 1 },
-    { title: "buy a turtle", id: 2 },
-    { title: "buy a football team", id: 3 },
-  ];
+  const todos = db.todo.findMany({
+    where: {
+      title: {},
+    },
+  });
   return todos;
 });
