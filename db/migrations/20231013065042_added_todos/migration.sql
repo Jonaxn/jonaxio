@@ -1,8 +1,0 @@
--- CreateTable
-CREATE TABLE "Todo" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updateAt" DATETIME NOT NULL,
-    "title" TEXT NOT NULL,
-    "done" BOOLEAN NOT NULL DEFAULT false
-);

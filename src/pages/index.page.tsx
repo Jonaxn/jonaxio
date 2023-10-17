@@ -16,7 +16,6 @@ const Home: BlitzPage = () => {
 
   return (
     <Layout title="Home">
-      {currentUser && <UserInfo />}
       {!currentUser && (
         <Vertical fullW fullH center>
           <AuthenticationForm />{" "}

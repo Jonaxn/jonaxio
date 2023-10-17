@@ -1,7 +1,6 @@
 import { LabeledTextField } from "@/core/components/LabeledTextField";
 import { FORM_ERROR } from "@/core/components/Form";
 import signup from "@/features/auth/mutations/signup";
-import { Signup } from "@/features/auth/schemas";
 import { useMutation } from "@blitzjs/rpc";
 import { Vertical } from "mantine-layout-components";
 import { Button, Title, PasswordInput, TextInput } from "@mantine/core";
@@ -18,6 +17,7 @@ export const SignupForm = (props: SignupFormProps) => {
     initialValues: {
       email: "",
       password: "",
+      name: "",
     },
 
     validate: {
@@ -25,7 +25,7 @@ export const SignupForm = (props: SignupFormProps) => {
     },
   });
 
-  let onSubmit = async (values: { email: string; password: string } | undefined) => {
+  let onSubmit = async (values: { email: string; password: string; name: string } | undefined) => {
     console.log(values);
     try {
       await signupMutation(values);
@@ -43,6 +43,12 @@ export const SignupForm = (props: SignupFormProps) => {
     <Vertical>
       <Title>Create an Account</Title>
       <form onSubmit={form.onSubmit(onSubmit)}>
+        <TextInput
+          withAsterisk
+          label="Name"
+          placeholder="your name"
+          {...form.getInputProps("name")}
+        />
         <TextInput
           withAsterisk
           label="Email"
