@@ -56,7 +56,7 @@ export function AuthenticationForm(props: PaperProps) {
       }
     }
   };
-  let onSignUp = async (values: { email: string; password: string } | undefined) => {
+  let onSignUp = async (values: { email: string; password: string; name: string } | undefined) => {
     console.log(values);
     try {
       await signupMutation(values);
@@ -92,7 +92,14 @@ export function AuthenticationForm(props: PaperProps) {
       <form onSubmit={form.onSubmit(onSubmit)}>
         <Stack>
           {type === "register" && (
-            <TextInput label="Name" placeholder="Your name" {...form.getInputProps("name")} />
+            <TextInput
+              required
+              label="Name"
+              placeholder="Your name"
+              {...form.getInputProps("name")}
+              radius="md"
+              onChange={(event) => form.setFieldValue("name", event.currentTarget.value)}
+            />
           )}
 
           <TextInput
