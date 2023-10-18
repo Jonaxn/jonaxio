@@ -8,6 +8,7 @@ import { notifications } from "@mantine/notifications";
 import { Horizontal, Vertical } from "mantine-layout-components";
 import { useCurrentUser } from "@/features/users/hooks/useCurrentUser";
 import toggleTodos from "@/features/todos/mutations/toggleTodos";
+import cleanCompleted from "@/features/todos/mutations/cleanCompleted";
 
 const Todo = ({ todo }) => {
   const [$toggleTodos] = useMutation(toggleTodos);
@@ -31,6 +32,7 @@ const Todos = () => {
   const [todoTitle, setTodoTitle] = useState("");
 
   const [$addTodos] = useMutation(addTodo, {});
+  const [$cleanCompleted] = useMutation(cleanCompleted, {});
   console.log("todos", todos);
 
   return (
@@ -53,6 +55,8 @@ const Todos = () => {
         {" "}
         create a todo
       </Button>
+      <Button onClick={async () => $cleanCompleted({})}> clean Completed</Button>
+
       {/*{isLoading && <Loader />}*/}
       {/*{!isLoading && todos && (*/}
       <List>

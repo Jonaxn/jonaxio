@@ -15,6 +15,14 @@ export default resolver.pipe(
       where: {
         userId,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        title: true,
+        done: true,
+      },
     });
     return todos;
   }
