@@ -11,10 +11,11 @@ import toggleTodos from "@/features/todos/mutations/toggleTodos";
 import cleanCompleted from "@/features/todos/mutations/cleanCompleted";
 
 const Todo = ({ todo }) => {
-  const [$toggleTodos] = useMutation(toggleTodos);
+  const [$toggleTodos, { isLoading }] = useMutation(toggleTodos);
   return (
     <Horizontal>
       <Checkbox
+        disabled={isLoading}
         checked={todo.done}
         onClick={async () => {
           await $toggleTodos({ id: todo.id });
@@ -31,7 +32,7 @@ const Todos = () => {
 
   const [todoTitle, setTodoTitle] = useState("");
 
-  const [$addTodos] = useMutation(addTodo, {});
+  const [$addTodos, { isLoading }] = useMutation(addTodo, {});
   const [$cleanCompleted] = useMutation(cleanCompleted, {});
   console.log("todos", todos);
 
@@ -46,6 +47,7 @@ const Todos = () => {
         placeholder="Enter a todo"
       />
       <Button
+        loading={isLoading}
         onClick={() => {
           const result = $addTodos({
             todoTitle: todoTitle,
