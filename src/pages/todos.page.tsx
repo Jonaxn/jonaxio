@@ -1,29 +1,41 @@
 import React, { Suspense, useState } from "react";
 import { useMutation, useQuery } from "@blitzjs/rpc";
 import fetchTodos from "@/features/todos/queries/fetchTodos";
-import { Button, Input, List, Loader, Text } from "@mantine/core";
+import { Button, Checkbox, Input, List, Loader, Text } from "@mantine/core";
 import Layout from "@/core/layouts/Layout";
 import addTodo from "@/features/todos/mutations/addTodo";
 import { notifications } from "@mantine/notifications";
-import { Vertical } from "mantine-layout-components";
+import { Horizontal, Vertical } from "mantine-layout-components";
+import { useCurrentUser } from "@/features/users/hooks/useCurrentUser";
+import toggleTodos from "@/features/todos/mutations/toggleTodos";
+
+const Todo = ({ todo }) => {
+  const [$toggleTodos] = useMutation(toggleTodos);
+  return (
+    <Horizontal>
+      <Checkbox
+        checked={todo.done}
+        onClick={async () => {
+          await $toggleTodos({ id: todo.id });
+        }}
+      />
+      <Text>{todo.title}</Text>
+    </Horizontal>
+  );
+};
 
 const Todos = () => {
-  const [todos, { isLoading }] = useQuery(fetchTodos, { search: "", userId: "1" });
+  const user = useCurrentUser();
+  const [todos] = useQuery(fetchTodos, { search: "", userId: "" });
 
   const [todoTitle, setTodoTitle] = useState("");
 
-  const [$addTodos] = useMutation(addTodo, {
-    onSuccess: (result) => {
-      notifications.show({
-        title: "Muation successfull",
-        message: `Created a todo with title ${result.title}`,
-      });
-    },
-  });
+  const [$addTodos] = useMutation(addTodo, {});
   console.log("todos", todos);
 
   return (
     <Vertical>
+      {user && <Text>hello {user.name}, here are your todos</Text>}
       <Input
         value={todoTitle}
         onChange={(e) => {
@@ -41,16 +53,14 @@ const Todos = () => {
         {" "}
         create a todo
       </Button>
-      {isLoading && <Loader />}
-      {!isLoading && todos && (
-        <List>
-          {todos.map((todo) => (
-            <List.Item key={todo.id}>
-              <Text>{todo.title}</Text>
-            </List.Item>
-          ))}
-        </List>
-      )}
+      {/*{isLoading && <Loader />}*/}
+      {/*{!isLoading && todos && (*/}
+      <List>
+        {todos.map((todo) => (
+          <Todo key={todo.id} todo={todo} />
+        ))}
+      </List>
+      {/*)}*/}
     </Vertical>
   );
 };
