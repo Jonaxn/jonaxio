@@ -80,9 +80,9 @@ const Todos = () => {
 const TodosPage = () => {
   return (
     <Layout>
-      <Suspense fallback={<Loader />}>
-        <Todos />
-      </Suspense>
+      {/*<Suspense fallback={<Loader />}>*/}
+      <Todos />
+      {/*</Suspense>*/}
     </Layout>
   );
 };

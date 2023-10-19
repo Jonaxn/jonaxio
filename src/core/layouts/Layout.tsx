@@ -98,7 +98,16 @@ const Layout: BlitzLayout<Prop> = ({ title, maxWidth = 800, children }) => {
       >
         <Vertical fullW fullH>
           <ErrorBoundary resetKeys={[user]} FallbackComponent={RootErrorFallback}>
-            <Suspense fallback={<Loader />}> {children}</Suspense>
+            <Suspense
+              fallback={
+                <Vertical center fullH fullW>
+                  <Loader />
+                </Vertical>
+              }
+            >
+              {" "}
+              {children}
+            </Suspense>
           </ErrorBoundary>
         </Vertical>
       </AppShell>

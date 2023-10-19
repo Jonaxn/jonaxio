@@ -39,8 +39,8 @@ export function AuthenticationForm(props: PaperProps) {
       password: (val) => (val.length <= 6 ? "Password should include at least 6 characters" : null),
     },
   });
-  const [$login] = useMutation(login);
-  const [$signup] = useMutation(signup);
+  const [$login, { isLoading: isLoggingIn }] = useMutation(login);
+  const [$signup, { isLoading: isSigningUp }] = useMutation(signup);
 
   const onSubmit = (values) => {
     if (type === "login") $login(values);
@@ -48,8 +48,10 @@ export function AuthenticationForm(props: PaperProps) {
     console.log(values);
   };
 
+  const Loading = isLoggingIn || isSigningUp;
+
   return (
-    <Vertical>
+    <Vertical mih="100vh" center fullH fullW>
       <Paper radius="md" p="xl" withBorder {...props}>
         <Text size="lg" weight={500}>
           Welcome to Jonaxio, {type} with
@@ -112,7 +114,7 @@ export function AuthenticationForm(props: PaperProps) {
                 ? "Already have an account? Login"
                 : "Don't have an account? Register"}
             </Anchor>
-            <Button type="submit" radius="xl">
+            <Button loading={Loading} type="submit" radius="xl">
               {upperFirst(type)}
             </Button>
           </Group>
