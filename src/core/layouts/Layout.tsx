@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React, { FC, Suspense } from "react";
-import { BlitzLayout, Routes } from "@blitzjs/next";
+import { BlitzLayout, ErrorBoundary, Routes } from "@blitzjs/next";
 import {
   Anchor,
   AppShell,
@@ -19,12 +19,16 @@ import { useMutation } from "@blitzjs/rpc";
 import logout from "@/features/auth/mutations/logout";
 import { useCurrentUser } from "@/features/users/hooks/useCurrentUser";
 import { IconUserShield } from "@tabler/icons-react";
+import { RootErrorFallback } from "@/core/components/RootErrorFallback";
+import { useRouter } from "next/router";
 
 type Prop = { title?: string; children?: React.ReactNode; maxWidth?: number };
 const Layout: BlitzLayout<Prop> = ({ title, maxWidth = 800, children }) => {
   const thisYear = new Date().getFullYear();
   const [logoutMutation] = useMutation(logout);
   const user = useCurrentUser();
+  const router = useRouter();
+
   return (
     <>
       <Head>
@@ -66,6 +70,7 @@ const Layout: BlitzLayout<Prop> = ({ title, maxWidth = 800, children }) => {
                     variant="light"
                     onClick={async () => {
                       await logoutMutation();
+                      router.push("/");
                     }}
                   >
                     Logout
@@ -92,7 +97,9 @@ const Layout: BlitzLayout<Prop> = ({ title, maxWidth = 800, children }) => {
         })}
       >
         <Vertical fullW fullH>
-          <Suspense fallback={<Loader />}> {children}</Suspense>
+          <ErrorBoundary resetKeys={[user]} FallbackComponent={RootErrorFallback}>
+            <Suspense fallback={<Loader />}> {children}</Suspense>
+          </ErrorBoundary>
         </Vertical>
       </AppShell>
     </>

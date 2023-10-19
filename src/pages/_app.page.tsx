@@ -8,19 +8,19 @@ import { Notifications } from "@mantine/notifications";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ErrorBoundary FallbackComponent={RootErrorFallback}>
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          /** Put your mantine theme override here */
-          colorScheme: "dark",
-        }}
-      >
-        <Notifications position="top-left" />
-        <Suspense fallback={<Loader />}>{<Component {...pageProps} />}</Suspense>
-      </MantineProvider>
-    </ErrorBoundary>
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{
+        /** Put your mantine theme override here */
+        colorScheme: "dark",
+      }}
+    >
+      {/*<ErrorBoundary FallbackComponent={RootErrorFallback}>*/}
+      <Notifications position="top-left" />
+      <Suspense fallback={<Loader />}>{<Component {...pageProps} />}</Suspense>
+      {/*</ErrorBoundary>*/}
+    </MantineProvider>
   );
 }
 
