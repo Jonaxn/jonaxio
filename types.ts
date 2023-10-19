@@ -14,4 +14,4 @@ declare module "@blitzjs/auth" {
   }
 }
 
-export type ReactFC<T> = React.FC<PropsWithChildren>;
+export type ReactFC<T> = React.FC<PropsWithChildren & T>;

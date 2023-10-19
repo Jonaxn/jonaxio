@@ -9,8 +9,14 @@ import { Horizontal, Vertical } from "mantine-layout-components";
 import { useCurrentUser } from "@/features/users/hooks/useCurrentUser";
 import toggleTodos from "@/features/todos/mutations/toggleTodos";
 import cleanCompleted from "@/features/todos/mutations/cleanCompleted";
+import { PromiseReturnType } from "blitz";
+import { ReactFC } from "~/types";
 
-const Todo = ({ todo }) => {
+type Todos = PromiseReturnType<typeof fetchTodos>;
+
+type TodoType = Todos[0];
+
+const Todo: ReactFC<{ todo: TodoType }> = ({ todo }) => {
   const [$toggleTodos, { isLoading }] = useMutation(toggleTodos);
   return (
     <Horizontal>
