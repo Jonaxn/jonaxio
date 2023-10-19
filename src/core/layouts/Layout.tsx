@@ -1,13 +1,24 @@
 import Head from "next/head";
 import React, { FC, Suspense } from "react";
 import { BlitzLayout, Routes } from "@blitzjs/next";
-import { Anchor, AppShell, Button, Footer, Header, Loader, Navbar, Text } from "@mantine/core";
+import {
+  Anchor,
+  AppShell,
+  Button,
+  Footer,
+  Header,
+  Loader,
+  Navbar,
+  Text,
+  Tooltip,
+} from "@mantine/core";
 import { Horizontal, Vertical } from "mantine-layout-components";
 import { styles } from "ansi-colors";
 import Link from "next/link";
 import { useMutation } from "@blitzjs/rpc";
 import logout from "@/features/auth/mutations/logout";
 import { useCurrentUser } from "@/features/users/hooks/useCurrentUser";
+import { IconUserShield } from "@tabler/icons-react";
 
 type Prop = { title?: string; children?: React.ReactNode; maxWidth?: number };
 const Layout: BlitzLayout<Prop> = ({ title, maxWidth = 800, children }) => {
@@ -41,8 +52,15 @@ const Layout: BlitzLayout<Prop> = ({ title, maxWidth = 800, children }) => {
                 Jonaxio
               </Anchor>
               {user && (
-                <Horizontal>
-                  <Text>{user.name}</Text>
+                <Horizontal center>
+                  <Horizontal center spacing="xs">
+                    <Text>{user.name}</Text>
+                    {user.isAdmin && (
+                      <Tooltip label="Admin">
+                        <IconUserShield size={15} />
+                      </Tooltip>
+                    )}
+                  </Horizontal>
                   <Button
                     size="xs"
                     variant="light"

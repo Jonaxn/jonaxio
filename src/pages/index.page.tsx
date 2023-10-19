@@ -4,6 +4,9 @@ import { BlitzPage } from "@blitzjs/next";
 import { Horizontal, Vertical } from "mantine-layout-components";
 import { AuthenticationForm } from "@/core/components/MainAuthenticationForm";
 import { useCurrentUser } from "@/features/users/hooks/useCurrentUser";
+import { Button } from "@mantine/core";
+import { useMutation } from "@blitzjs/rpc";
+import adminOnlyMutation from "@/features/auth/mutations/adminOnlyMutation";
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -11,13 +14,19 @@ import { useCurrentUser } from "@/features/users/hooks/useCurrentUser";
  */
 
 const Home: BlitzPage = () => {
-  const currentUser = useCurrentUser();
+  const { user } = useCurrentUser();
+  const [$adminOnlyMutation] = useMutation(adminOnlyMutation);
 
   return (
     <Layout title="Home">
-      {!currentUser && (
+      {!user && (
         <Vertical fullW fullH center>
           <AuthenticationForm />{" "}
+        </Vertical>
+      )}
+      {user && (
+        <Vertical>
+          <Button onClick={() => $adminOnlyMutation({})}>Admin only button</Button>
         </Vertical>
       )}
     </Layout>
