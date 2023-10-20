@@ -4,6 +4,7 @@ import { Role } from "~/types";
 import { z } from "zod";
 import { email, password } from "@/features/auth/schemas";
 import db from "~/db";
+import { PrismaError } from "@/utils/blitz-utils";
 export const input = z.object({
   email,
   password,
@@ -12,11 +13,15 @@ export const input = z.object({
 
 export default resolver.pipe(resolver.zod(input), async ({ email, password, name }, ctx) => {
   const hashedPassword = await SecurePassword.hash(password.trim());
-  const user = await db.user.create({
-    data: { email: email.toLowerCase().trim(), hashedPassword, role: "USER", name: name },
-    select: { id: true, name: true, email: true, role: true },
-  });
+  try {
+    const user = await db.user.create({
+      data: { email: email.toLowerCase().trim(), hashedPassword, role: "USER", name: name },
+      select: { id: true, name: true, email: true, role: true },
+    });
 
-  await ctx.session.$create({ userId: user.id, role: user.role as Role });
-  return user;
+    await ctx.session.$create({ userId: user.id, role: user.role as Role });
+    return user;
+  } catch (e) {
+    throw new PrismaError(e.message, e.code, e.meta);
+  }
 });
