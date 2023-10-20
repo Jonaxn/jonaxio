@@ -1,5 +1,3 @@
-import { LabeledTextField } from "@/core/components/LabeledTextField";
-import { FORM_ERROR } from "@/core/components/Form";
 import signup from "@/features/auth/mutations/signup";
 import { useMutation } from "@blitzjs/rpc";
 import { Vertical } from "mantine-layout-components";
@@ -35,7 +33,6 @@ export const SignupForm = (props: SignupFormProps) => {
         // This error comes from Prisma
         return { email: "This email is already being used" };
       } else {
-        return { [FORM_ERROR]: error.toString() };
       }
     }
   };

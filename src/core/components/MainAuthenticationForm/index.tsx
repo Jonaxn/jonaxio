@@ -1,5 +1,5 @@
 import { useToggle, upperFirst } from "@mantine/hooks";
-import { useForm } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
 import {
   TextInput,
   PasswordInput,
@@ -19,34 +19,34 @@ import {
 } from "@/core/components/MainAuthenticationForm/SocialButtons";
 import { useMutation } from "@blitzjs/rpc";
 import login from "@/features/auth/mutations/login";
-import { AuthenticationError } from "blitz";
-import { FORM_ERROR } from "@/core/components/Form";
 import signup from "@/features/auth/mutations/signup";
 import { Vertical } from "mantine-layout-components";
+import { SignupInput } from "@/features/auth/schemas";
+
+import { z } from "zod";
+
+export const bindCheckBoxToForm = (form: any, key: string) => {
+  const inputProps = form.getInputProps(key);
+  return {
+    ...inputProps,
+    checked: inputProps.value,
+  };
+};
+
+type SignupFormType = z.infer<typeof SignupInput>;
 
 export function AuthenticationForm(props: PaperProps) {
   const [type, toggle] = useToggle(["login", "register"]);
-  const form = useForm({
-    initialValues: {
-      email: "",
-      name: "",
-      password: "",
-      terms: true,
-    },
-
-    validate: {
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-      password: (val) => (val.length <= 6 ? "Password should include at least 6 characters" : null),
-    },
-  });
   const [$login, { isLoading: isLoggingIn }] = useMutation(login);
   const [$signup, { isLoading: isSigningUp }] = useMutation(signup);
 
-  const onSubmit = (values) => {
-    if (type === "login") $login(values);
-    if (type === "register") $signup(values);
-    console.log(values);
-  };
+  const form = useForm<SignupFormType>({
+    validate: zodResolver(SignupInput),
+    validateInputOnBlur: true,
+    validateInputOnChange: ["terms"],
+  });
+
+  const onSubmit = (values: SignupFormType) => {};
 
   const Loading = isLoggingIn || isSigningUp;
 
@@ -64,7 +64,13 @@ export function AuthenticationForm(props: PaperProps) {
 
         <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-        <form onSubmit={form.onSubmit(onSubmit)}>
+        <form
+          onSubmit={form.onSubmit((values) => {
+            if (type === "login") $login(values);
+            if (type === "register") $signup(values);
+            console.log(values);
+          })}
+        >
           <Stack>
             {type === "register" && (
               <TextInput
@@ -95,9 +101,10 @@ export function AuthenticationForm(props: PaperProps) {
 
             {type === "register" && (
               <Checkbox
+                {...bindCheckBoxToForm(form, "terms")}
                 label="I accept terms and conditions"
-                checked={form.values.terms}
-                onChange={(event) => form.setFieldValue("terms", event.currentTarget.checked)}
+                // checked={form.values.terms}
+                // onChange={(event) => form.setFieldValue("terms", event.currentTarget.checked)}
               />
             )}
           </Stack>
@@ -114,7 +121,7 @@ export function AuthenticationForm(props: PaperProps) {
                 ? "Already have an account? Login"
                 : "Don't have an account? Register"}
             </Anchor>
-            <Button loading={Loading} type="submit" radius="xl">
+            <Button disabled={!form.isValid()} loading={Loading} type="submit" radius="xl">
               {upperFirst(type)}
             </Button>
           </Group>
