@@ -25,6 +25,8 @@ model User {
   email          String    @unique
   hashedPassword String?
   role           String    @default("USER")
+  username       String?   @unique
+  bio            String?
   sessions       Session[]
   todos          Todo[]
   tokens         Token[]
