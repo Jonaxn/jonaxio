@@ -1,29 +1,33 @@
-import { Resend } from "resend";
+import { CreateEmailOptions } from "resend/build/src/emails/interfaces";
 import { isDev } from "@/config";
-import React from "react";
+import { render } from "@react-email/render";
+import { nodemailerAppTransport } from "~/email/transports/nodemailer-app-transport";
 import StripeWelcomeEmail from "~/email/react-email/emails/stripe-welcome";
+import React from "react";
+import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendEmail = async ({ subject, to, html }) => {
-  let message = {
-    from: "delivered@resend.dev",
-    to,
+  let react = React.createElement(StripeWelcomeEmail, {
+    content: "content",
+    buttonText: "buttonText",
+  });
+
+  let message: CreateEmailOptions = {
+    from: "onboarding@resend.dev",
     subject,
-    react: React.createElement(StripeWelcomeEmail, {
-      content: "hell world",
-      buttonText: "click here to do something with our email",
-    }),
+    to,
+    html,
   };
 
-  // if (isDev) {
-  //   // we can't open file here, because it's in wsl2 now
-  //   const previewEmail = (await import("preview-email")).default;
-  //   const res = await previewEmail(message);
-  //   console.log("res", typeof res, res);
-  //   // \\wsl.localhost\Ubuntu-20.04\tmp
-  //   return res;
-  // } else {
-  // }
-  return resend.emails.send(message);
+  if (isDev) {
+    const html = render(react);
+    return nodemailerAppTransport.sendMail({
+      ...message,
+      html,
+    });
+  }
+
+  return resend.emails.send({ ...message, react });
 };
