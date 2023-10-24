@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "blitz dev",
+    "email": "cd email/react-email && npm run dev --port 3009",
     "build": "blitz build",
     "start": "blitz start",
     "db:studio": "BROWER=none blitz prisma studio",
