@@ -7,6 +7,7 @@ import { useCurrentUser } from "@/features/users/hooks/useCurrentUser";
 import { Button } from "@mantine/core";
 import { useMutation } from "@blitzjs/rpc";
 import adminOnlyMutation from "@/features/auth/mutations/adminOnlyMutation";
+import sendTestEmail from "@/features/users/mutations/sendTestEmail";
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -16,9 +17,21 @@ import adminOnlyMutation from "@/features/auth/mutations/adminOnlyMutation";
 const Home: BlitzPage = () => {
   const user = useCurrentUser();
   const [$adminOnlyMutation] = useMutation(adminOnlyMutation);
+  const [$sendTestEmawil] = useMutation(sendTestEmail);
 
   return (
     <Layout title="Home">
+      <Button
+        onClick={() => {
+          $sendTestEmawil({
+            subject: "Test Email",
+            to: "jonaxwork@outlook.com",
+            html: "<div>Test Email</div>",
+          });
+        }}
+      >
+        Send Test Email
+      </Button>
       {!user && <AuthenticationForm />}
       {user && (
         <Vertical>
