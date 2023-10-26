@@ -17,21 +17,10 @@ import sendTestEmail from "@/features/users/mutations/sendTestEmail";
 const Home: BlitzPage = () => {
   const user = useCurrentUser();
   const [$adminOnlyMutation] = useMutation(adminOnlyMutation);
-  const [$sendTestEmawil] = useMutation(sendTestEmail);
+  // const [$sendTestEmawil] = useMutation(sendTestEmail);
 
   return (
     <Layout title="Home">
-      <Button
-        onClick={() => {
-          $sendTestEmawil({
-            subject: "Test Email",
-            to: "jonaxwork@outlook.com",
-            html: "<div>Test Email</div>",
-          });
-        }}
-      >
-        Send Test Email
-      </Button>
       {!user && <AuthenticationForm />}
       {user && (
         <Vertical>

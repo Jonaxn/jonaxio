@@ -1,6 +1,7 @@
 import { resolver } from "@blitzjs/rpc";
 import { z } from "zod";
 import { sendEmail } from "~/email/sendEmail";
+import { password } from "@/features/auth/schemas";
 
 const Input = z.object({
   to: z.string(),
@@ -12,6 +13,6 @@ export default resolver.pipe(
   resolver.zod(Input),
   resolver.authorize(),
   async (input, { session: { userId } }) => {
-    return sendEmail(input);
+    // return sendEmail(input);
   }
 );
